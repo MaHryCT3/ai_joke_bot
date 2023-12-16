@@ -16,5 +16,5 @@ class SessionMiddleware(BaseMiddleware):
         data: dict[str, Any],
     ) -> Any:
         with Session(engine, expire_on_commit=False) as session:
-            data["session"] = session
+            data['session'] = session
             return await handler(event, data)

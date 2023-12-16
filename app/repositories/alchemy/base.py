@@ -7,7 +7,8 @@ from sqlalchemy.orm import Session
 from app.db.engine import engine
 from app.repositories.abstract import AbstractRepository
 
-DomainModel = TypeVar("DomainModel")
+
+DomainModel = TypeVar('DomainModel')
 
 
 class BaseAlchemyRepository(AbstractRepository, Generic[DomainModel], ABC):
@@ -17,11 +18,7 @@ class BaseAlchemyRepository(AbstractRepository, Generic[DomainModel], ABC):
         self.session = session or Session(engine, expire_on_commit=False)
 
     def get(self, id: int) -> DomainModel | None:
-        return (
-            self.session.query(self.domain_model)
-            .filter(self.domain_model.id == id)
-            .first()
-        )
+        return self.session.query(self.domain_model).filter(self.domain_model.id == id).first()
 
     def list(self) -> list[DomainModel]:
         return self.session.query(self.domain_model).all()

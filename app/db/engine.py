@@ -1,9 +1,10 @@
-from sqlalchemy import URL, create_engine
+from sqlalchemy import create_engine, URL
 
 from app.config import settings
 
+
 POSTGRES_URL = URL.create(
-    "postgresql",
+    'postgresql',
     username=settings.POSTGRES_USER,
     password=settings.POSTGRES_PASSWORD,
     host=settings.POSTGRES_HOST,

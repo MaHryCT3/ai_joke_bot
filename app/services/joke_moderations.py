@@ -1,17 +1,18 @@
+from aiogram.client.bot import Bot
 from aiogram.filters.callback_data import CallbackData
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
+from app.config import settings
 from app.domains.joke import Joke
 from app.domains.joke_suggestion import JokeSuggestion
 from app.repositories.alchemy.joke import JokeAlchemyRepository
-from app.repositories.alchemy.joke_suggestion import \
-    JokeSuggestionAlchemyRepository
-from aiogram.client.bot import Bot
-from app.config import settings
+from app.repositories.alchemy.joke_suggestion import JokeSuggestionAlchemyRepository
 
-class JokeModerationCallback(CallbackData, prefix="moderation"):
+
+class JokeModerationCallback(CallbackData, prefix='moderation'):
     joke_id: int
     is_approve: bool
+
 
 class JokesModeration:
     """
@@ -64,13 +65,19 @@ class JokesModeration:
         message = joke_suggestion.text
 
         keyboard_builder = InlineKeyboardBuilder()
-        keyboard_builder.button(text='✅ Принять', callback_data=JokeModerationCallback(joke_id=joke_suggestion.id, is_approve=True).pack())
-        keyboard_builder.button(text='❌ Отклонить', callback_data=JokeModerationCallback(joke_id=joke_suggestion.id, is_approve=False).pack())
+        keyboard_builder.button(
+            text='✅ Принять',
+            callback_data=JokeModerationCallback(joke_id=joke_suggestion.id, is_approve=True).pack(),
+        )
+        keyboard_builder.button(
+            text='❌ Отклонить',
+            callback_data=JokeModerationCallback(joke_id=joke_suggestion.id, is_approve=False).pack(),
+        )
 
         await bot.send_message(
             chat_id=settings.MODERATION_CHAT_ID,
             text=message,
-            reply_markup=keyboard_builder.as_markup()
+            reply_markup=keyboard_builder.as_markup(),
         )
 
     async def _send_approve_message_to_user(self, joke_suggestion: JokeSuggestion):

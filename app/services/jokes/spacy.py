@@ -1,5 +1,5 @@
 import ru_core_news_lg
-import spacy_fastlang
+import spacy_fastlang  # noqa
 from sklearn import metrics
 from spacy.tokens import Doc
 
@@ -9,8 +9,9 @@ from app.services.jokes.abstract import AbstractJokeGetter
 from app.services.jokes.exceptions import NotSupportedLanguageException
 from utils.singleton import Singleton
 
+
 nlp = ru_core_news_lg.load()
-nlp.add_pipe("language_detector")
+nlp.add_pipe('language_detector')
 
 
 class SpacyJokeGetter(Singleton, AbstractJokeGetter):
@@ -20,7 +21,7 @@ class SpacyJokeGetter(Singleton, AbstractJokeGetter):
     https://spacy.io/.
     """
 
-    AVAILABLE_LANGUAGES = ["ru"]
+    AVAILABLE_LANGUAGES = ['ru']
     MIN_MATCH_PERCENT: float = 0.15
 
     def __init__(self) -> None:
@@ -35,8 +36,7 @@ class SpacyJokeGetter(Singleton, AbstractJokeGetter):
 
         phrase_vector = nlp_phrase.vector.reshape((1, 300))
         match_percents = [
-            metrics.pairwise.cosine_similarity(phrase_vector, joke_vector)
-            for joke_vector in self._joke_vectors
+            metrics.pairwise.cosine_similarity(phrase_vector, joke_vector) for joke_vector in self._joke_vectors
         ]
 
         max_match_percent = max(match_percents)
@@ -49,6 +49,4 @@ class SpacyJokeGetter(Singleton, AbstractJokeGetter):
         Проверяет, какой язык используется, если его нет в списке доступных возбуждает ошибку.
         """
         if nlp_phrase._.language not in self.AVAILABLE_LANGUAGES:
-            raise NotSupportedLanguageException(
-                f"Language {nlp_phrase._.language} is not supported"
-            )
+            raise NotSupportedLanguageException(f'Language {nlp_phrase._.language} is not supported')

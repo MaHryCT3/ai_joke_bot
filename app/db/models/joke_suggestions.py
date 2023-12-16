@@ -1,13 +1,13 @@
 from datetime import datetime
 
-from sqlalchemy import BigInteger, String, func
+from sqlalchemy import BigInteger, func, String
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.models.base import BaseModel
 
 
 class JokeSuggestionTable(BaseModel):
-    __tablename__ = "joke_suggestion"
+    __tablename__ = 'joke_suggestion'
 
     text = mapped_column(
         String,

@@ -1,14 +1,12 @@
 import logging
 import sys
 
-from pydantic import AnyUrl, ConfigDict, Field
+from pydantic import ConfigDict
 from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    model_config = ConfigDict(
-        extra="ignore"
-    )  # Игнорирование лишних переменных в env файле
+    model_config = ConfigDict(extra='ignore')  # Игнорирование лишних переменных в env файле
 
     # Debug
     DEBUG: bool = False
@@ -25,7 +23,7 @@ class Settings(BaseSettings):
     POSTGRES_HOST: str
 
 
-settings = Settings(_env_file=".env")
+settings = Settings(_env_file='.env')
 
 logger = logging.getLogger()
 logger.addHandler(logging.StreamHandler(sys.stdout))
