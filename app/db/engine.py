@@ -13,4 +13,4 @@ POSTGRES_URL = URL.create(
 )
 
 
-engine = create_engine(POSTGRES_URL, echo=True)
+engine = create_engine(POSTGRES_URL, echo=True, pool_size=100, max_overflow=200)
