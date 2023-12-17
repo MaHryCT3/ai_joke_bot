@@ -1,8 +1,10 @@
 from aiogram import F, Router
+from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
-from aiogram.types import Message
+from aiogram.types import CallbackQuery, Message
 
+from app.handlers.keyboards import get_clear_state_inline_button
 from app.services.joke_moderations import JokesModeration
 
 
@@ -13,10 +15,17 @@ class AddJokeStates(StatesGroup):
     add_joke = State()
 
 
-@router.message(F.text.startswith('добавить шутку'))
-async def add_joke_enter(message: Message, state: FSMContext):
+@router.message(Command('add_joke'))
+@router.message(F.text.lower() == 'добавить шутку')
+@router.callback_query(F.data == 'add_joke')
+async def add_joke_enter(message: Message | CallbackQuery, state: FSMContext):
     await state.set_state(AddJokeStates.add_joke)
-    return await message.answer('Хорошо, пришли свою шутку')
+
+    await message.bot.send_message(
+        message.from_user.id,
+        'Хорошо, отправь свою шутку',
+        reply_markup=get_clear_state_inline_button().as_markup(),
+    )
 
 
 @router.message(AddJokeStates.add_joke)
